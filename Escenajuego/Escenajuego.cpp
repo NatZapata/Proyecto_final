@@ -137,3 +137,115 @@ void EscenaJuego::generarObstaculo()
     addItem(obstaculo.get());
     m_entidades.push_back(std::move(obstaculo));
 }
+void EscenaJuego::generarRecolectable()
+{
+    auto recolectable = std::make_unique<Recolectable>();
+    recolectable->setPos(910, QRandomGenerator::global()->bounded(245, 335));
+    recolectable->setVelocidad(QPointF(-m_dificultad.velocidadMundo() * 0.75, 0));
+    addItem(recolectable.get());
+    m_entidades.push_back(std::move(recolectable));
+}
+
+void EscenaJuego::actualizarEntidades(double tiempoDelta)
+{
+    for (auto& entidad : m_entidades) {
+        entidad->actualizar(tiempoDelta);
+    }
+}
+
+void EscenaJuego::manejarColisiones()
+{
+    if (!m_jugador) {
+        return;
+    }
+
+    for (auto& entidad : m_entidades) {
+        if (!entidad->estaVivo() || !m_jugador->collidesWithItem(entidad.get())) {
+            continue;
+        }
+
+        if (entidad->tipoEntidad() == TipoEntidad::Obstaculo) {
+            const double fuerza = MotorFisica::fuerzaNewton(entidad->masa(), 180.0);
+            const int danoCalculado = MotorFisica::danoPorFuerza(fuerza);
+            m_jugador->perderEnergia(std::max(danoCalculado, m_dificultad.danoObstaculo()));
+            entidad->destruir();
+        } else if (entidad->tipoEntidad() == TipoEntidad::Recolectable) {
+            m_jugador->agregarEnergia(m_dificultad.energiaRecolectable());
+            m_puntaje += 10;
+            entidad->destruir();
+        }
+    }
+}
+
+void EscenaJuego::eliminarEntidadesMuertas()
+{
+    auto it = m_entidades.begin();
+    while (it != m_entidades.end()) {
+        if (!(*it)->estaVivo()) {
+            removeItem(it->get());
+            it = m_entidades.erase(it);
+        } else {
+            ++it;
+        }
+    }
+}
+
+void EscenaJuego::verificarEstado()
+{
+    if (!m_jugador) {
+        return;
+    }
+
+    if (m_jugador->energia() <= 0) {
+        finalizar(false, "La energia llego a cero.");
+        return;
+    }
+
+    if (m_segundosTranscurridos >= m_dificultad.duracionNivelSegundos()) {
+        finalizar(true, "Nivel 1 completado. Este avance corresponde aproximadamente al 50% del proyecto final.");
+    }
+}
+
+void EscenaJuego::finalizar(bool completado, const QString& mensaje)
+{
+    if (!m_corriendo) {
+        return;
+    }
+    m_corriendo = false;
+    m_temporizador.stop();
+    emit juegoTerminado(completado, mensaje);
+}
+
+void EscenaJuego::limpiarMundo()
+{
+    for (auto& entidad : m_entidades) {
+        removeItem(entidad.get());
+    }
+    m_entidades.clear();
+
+    if (m_jugador) {
+        removeItem(m_jugador.get());
+        m_jugador.reset();
+    }
+
+    clear();
+}
+
+void EscenaJuego::keyPressEvent(QKeyEvent* event)
+{
+    if (!event->isAutoRepeat()) {
+        m_teclasPresionadas.insert(event->key());
+    }
+    if (event->key() == Qt::Key_Space && m_jugador) {
+        m_jugador->saltar();
+    }
+    QGraphicsScene::keyPressEvent(event);
+}
+
+void EscenaJuego::keyReleaseEvent(QKeyEvent* event)
+{
+    if (!event->isAutoRepeat()) {
+        m_teclasPresionadas.remove(event->key());
+    }
+    QGraphicsScene::keyReleaseEvent(event);
+}
