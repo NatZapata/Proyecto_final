@@ -1,51 +1,44 @@
 #include "Obstaculo.h"
+#include <cmath>
 
-#include <QPainter>
-#include <QtMath>
+namespace logica {
 
-Obstaculo::Obstaculo(TipoMovimiento tipoMovimiento, QGraphicsItem* parent)
-    : Entidad(TipoEntidad::Obstaculo, QSizeF(50, 50), parent),
-    m_tipoMovimiento(tipoMovimiento),
-    m_tiempo(0.0),
-    m_baseY(0.0)
-{
-    setMasa(tipoMovimiento == TipoMovimiento::Estatico ? 6.0 : 9.0);
+Obstaculo::Obstaculo(double x, double y, double ancho, double alto,
+                     Movimiento mov, double costoEnergia,
+                     double velScroll, const std::string& sprite)
+    : Entidad(x, y, ancho, alto),
+      movimiento_(mov), costoEnergia_(costoEnergia),
+      baseY_(y), baseX_(x), fase_(0.0),
+      amplitud_(mov == Movimiento::Vertical ? 70.0 : 55.0),
+      frecuencia_(2.0), velScroll_(velScroll) {
+    setSprite(sprite);
 }
 
-void Obstaculo::actualizar(double tiempoDelta)
-{
-    if (m_baseY == 0.0) {
-        m_baseY = pos().y();
+void Obstaculo::actualizar(double dt) {
+    fase_ += dt;
+
+    baseX_ -= velScroll_ * dt;
+    x_ = baseX_;
+
+    // Movimiento adicional segun el tipo
+    switch (movimiento_) {
+        case Movimiento::Estatico:
+            y_ = baseY_;
+            break;
+        case Movimiento::Lateral:
+            x_ = baseX_ + amplitud_ * std::sin(frecuencia_ * fase_);
+            y_ = baseY_;
+            break;
+        case Movimiento::Vertical:
+            // Oscilacion vertical tipo "saltos".
+            y_ = baseY_ - std::abs(amplitud_ * std::sin(frecuencia_ * fase_));
+            break;
     }
 
-    m_tiempo += tiempoDelta;
-    Entidad::actualizar(tiempoDelta);
-
-    if (m_tipoMovimiento == TipoMovimiento::Vertical) {
-        setY(m_baseY + qSin(m_tiempo * 4.0) * 22.0);
-    }
-
-    if (pos().x() < -80.0) {
-        destruir();
-    }
-}
-
-void Obstaculo::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*)
-{
-    painter->setRenderHint(QPainter::Antialiasing, true);
-    painter->setPen(QPen(QColor(65, 65, 65), 2));
-
-    if (m_tipoMovimiento == TipoMovimiento::Estatico) {
-        painter->setBrush(QColor(210, 90, 90));
-        painter->drawRoundedRect(4, 8, 42, 34, 7, 7);
-        painter->setBrush(QColor(250, 230, 120));
-        painter->drawEllipse(9, 12, 10, 10);
-        painter->drawEllipse(30, 12, 10, 10);
-    } else {
-        painter->setBrush(QColor(115, 155, 230));
-        painter->drawEllipse(5, 5, 40, 40);
-        painter->setPen(QPen(Qt::white, 3));
-        painter->drawLine(16, 16, 34, 34);
-        painter->drawLine(34, 16, 16, 34);
+    // Cuando sale por la izquierda se desactiva
+    if (x_ + ancho_ < -20.0) {
+        setActivo(false);
     }
 }
+
+} // namespace logica
