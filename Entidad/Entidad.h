@@ -2,34 +2,37 @@
 #define ENTIDAD_H
 
 #include <string>
+#include <stdexcept>
 #include "Geometria.h"
 
-// ---------------------------------------------------------------------------
-//  Entidad.h  -  Clase BASE ABSTRACTA de todas las entidades del juego.
-//  Define posicion, velocidad, tamaño, estado y la clave de sprite que la
-//  capa GUI usara para dibujarla (la logica NO conoce Qt, solo una cadena).
+// clase abstracta de todas las entidades del juego. Heredan: Personaje, Enemigo, Obstaculos.
 
 namespace logica {
 
+class EntidadInvalidaException : public std::invalid_argument {
+public:
+    explicit EntidadInvalidaException(const std::string& detalle)
+        : std::invalid_argument("Entidad invalida: " + detalle) {}
+};
+
 class Entidad {
 protected:
-    double x_, y_;          // posicion (esquina superior izquierda)
-    double vx_, vy_;        // velocidad
-    double ancho_, alto_;   // tamaño
-    bool   activo_;         // si false, el nivel la elimina
-    std::string sprite_;    // clave del sprite para la GUI
+    double x_, y_;
+    double vx_, vy_;
+    double ancho_, alto_;
+    bool   activo_;
+    std::string sprite_;
 
 public:
     Entidad(double x, double y, double ancho, double alto);
-    virtual ~Entidad();                       // virtual -> destruccion polimorfica correcta
+    virtual ~Entidad();
 
-    // --- Interfaz polimorfica (metodos virtuales puros => clase abstracta) ---
-    virtual void actualizar(double dt) = 0;   // avanza la fisica/estado
-    virtual std::string tipo() const = 0;     // identificador legible del tipo
+    virtual void actualizar(double dt) = 0;
+    virtual std::string tipo() const = 0;
 
-    // --- Colisiones (AABB) ---
     RectF caja() const { return RectF(x_, y_, ancho_, alto_); }
     bool  colisionaCon(const Entidad& otra) const { return caja().intersecta(otra.caja()); }
+
     double x() const { return x_; }
     double y() const { return y_; }
     double vx() const { return vx_; }
@@ -47,6 +50,7 @@ public:
     void setSprite(const std::string& s) { sprite_ = s; }
 };
 
-}
+} // namespace logica
 
-#endif
+#endif // ENTIDAD_H
+

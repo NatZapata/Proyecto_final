@@ -1,5 +1,4 @@
 #include "Entidad.h"
-#include "Excepciones.h"
 
 namespace logica {
 
@@ -13,4 +12,4 @@ Entidad::Entidad(double x, double y, double ancho, double alto)
 
 Entidad::~Entidad() = default;
 
-}
+} // namespace logica
