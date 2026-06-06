@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>960</width>
+    <height>540</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Toy Story Run - Atletismo en el mundo de Toy Story</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="mainLayout">
+    <property name="leftMargin">
+     <number>0</number>
+    </property>
+    <property name="topMargin">
+     <number>0</number>
+    </property>
+    <property name="rightMargin">
+     <number>0</number>
+    </property>
+    <property name="bottomMargin">
+     <number>0</number>
+    </property>
+    <item>
+     <widget class="QStackedWidget" name="stackedWidget">
+      <property name="styleSheet">
+       <string notr="true">background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+    stop:0 #e8f4fd,
+    stop:0.5 #c8e0f5,
+    stop:1 #a8ccee);
+color: #1a1a1a;
+
+QCheckBox {
+    border: 2px solid #1a1a1a;
+    border-radius: 4px;
+    padding: 3px;
+}
+
+QComboBox {
+    border: 2px solid #1a1a1a;
+    border-radius: 4px;
+    padding: 3px;
+    background-color: white;
+    color: #1a1a1a;
+}</string>
+      </property>
+      <property name="currentIndex">
+       <number>0</number>
+      </property>
+      <widget class="QWidget" name="pageMenu">
+       <property name="styleSheet">
+        <string notr="true">background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+    stop:0 #e8f4fd,
+    stop:0.5 #c8e0f5,
+    stop:1 #a8ccee);
+color: #1a1a1a;
+
+QCheckBox {
+    border: 2px solid #1a1a1a;
+    border-radius: 4px;
+    padding: 3px;
+}
+
+QComboBox {
+    border: 2px solid #1a1a1a;
+    border-radius: 4px;
+    padding: 3px;
+    background-color: white;
+    color: #1a1a1a;
+}</string>
+       </property>
+       <layout class="QVBoxLayout" name="menuLayout">
+        <property name="leftMargin">
+         <number>80</number>
+        </property>
+        <property name="topMargin">
+         <number>24</number>
+        </property>
+        <property name="rightMargin">
+         <number>80</number>
+        </property>
+        <property name="bottomMargin">
+         <number>24</number>
+        </property>
+        <item>
+         <spacer name="topSpacer">
+          <property name="orientation">
+           <enum>Qt::Orientation::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>24</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QLabel" name="lblTitle">
+          <property name="font">
+           <font>
+            <pointsize>32</pointsize>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="text">
+           <string>¡Al infinito...Y a correr!</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignmentFlag::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="lblSubtitle">
+          <property name="font">
+           <font>
+            <pointsize>13</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Atletismo en el mundo de juguetes</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignmentFlag::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="difficultyLayout">
+          <item>
+           <spacer name="leftDif">
+            <property name="orientation">
+             <enum>Qt::Orientation::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QLabel" name="lblDifficulty">
+            <property name="text">
+             <string>Dificultad:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="comboDificultad"/>
+          </item>
+          <item>
+           <spacer name="rightDif">
+            <property name="orientation">
+             <enum>Qt::Orientation::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="QPushButton" name="btnNivel1">
+          <property name="text">
+           <string>Jugar Nivel 1 - Habitación de Andy</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="btnNivel2">
+          <property name="text">
+           <string>Jugar Nivel 2 - Jardín de Andy</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="btnCreditos">
+          <property name="text">
+           <string>Créditos / Uso académico de recursos</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="chkMute">
+          <property name="layoutDirection">
+           <enum>Qt::LayoutDirection::LeftToRight</enum>
+          </property>
+          <property name="text">
+           <string>Silenciar sonido</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="lblHelp">
+          <property name="text">
+           <string>Controles: A/D o  →/← para moverse • ESPACIO/↑ para saltar • P pausa • R reinicia • ESC menú
+Nivel 1: habitación, salto de obstáculos. Nivel 2: jardín, araña enemiga, piedras, objetos que caen y rayo de Coulomb.</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignmentFlag::AlignCenter</set>
+          </property>
+          <property name="wordWrap">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="btnSalir">
+          <property name="styleSheet">
+           <string notr="true">background:#e06a5a;color:white;</string>
+          </property>
+          <property name="text">
+           <string>Salir</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="bottomSpacer">
+          <property name="orientation">
+           <enum>Qt::Orientation::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>24</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="pageGame">
+       <layout class="QVBoxLayout" name="gamePageLayout">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="QWidget" name="gameContainer" native="true"/>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
